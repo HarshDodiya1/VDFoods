@@ -24,6 +24,7 @@ const connectDB = require("./db/db.js");
 connectDB();
 // Imported Routes
 
+
 // Routes
 
 app.get("/", (req, res) => {
