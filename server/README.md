@@ -1,141 +1,223 @@
-# Express.js Backend Boilerplate with Prisma and MongoDB
+# Auth API Endpoints
 
-Welcome to the Express.js server application integrated with **Prisma ORM** and **MongoDB**. This project is designed to handle user authentication, follow secure practices, and leverage environment-based configurations.
+This document provides an overview of the authentication endpoints for the spices e-commerce website, formatted with toggles for easy navigation.
 
-## Table of Contents
+---
 
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Setup Instructions](#setup-instructions)
-- [Environment Variables](#environment-variables)
-- [Database Configuration](#database-configuration)
-- [Running the Server](#running-the-server)
-- [Contributing](#contributing)
-- [License](#license)
-- [Dependencies](#dependencies)
+<details>
+<summary>1. Register a New User</summary>
 
-## Features
+**Endpoint:** `POST /api/auth/register`
 
-- **Express.js** server framework.
-- **MongoDB** integration using **Prisma ORM**.
-- **User Authentication** with JWT.
-- Secure headers with **Helmet** middleware.
-- **CORS** support for cross-origin resource sharing.
-- Environment-based configuration using **dotenv**.
+**Description:** Creates a new user account by taking user details, validating them, hashing the password, and saving the new user to the database.
 
-## Project Structure
-```
-└── 📁server
-    └── 📁config
-        └── config.js
-    └── 📁controllers
-        └── .gitkeep
-    └── 📁db
-        └── db.js
-    └── 📁middlewares
-        └── .gitkeep
-    └── 📁prisma
-        └── schema.prisma
-    └── 📁routes
-        └── .gitkeep
-    └── 📁utils
-        └── .gitkeep
-    └── .env copy
-    └── .gitignore
-    └── .prettierignore
-    └── .prettierrc
-    └── package-lock.json
-    └── package.json
-    └── README.md
-    └── server.js
-```
+**Request Body:**
 
-## Setup Instructions
-
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/HarshDodiya1/backend-boilerplate.git
-   ```
-
-2. **Install Dependencies**:
-   ```bash
-   npm install
-   ```
-
-3. **Set up Environment Variables**:
-   Create a `.env` file in the root directory (see [Environment Variables](#environment-variables)).
-
-4. **Generate Prisma Client**:
-   ```bash
-   npx prisma generate
-   ```
-
-## Environment Variables
-
-Create a `.env` file in the root directory with the following:
-
-```plaintext
-PORT=3000
-CORS_ORIGIN1=http://localhost:5173
-CORS_ORIGIN2=http://localhost:5173
-JWT_SECRET=your_jwt_secret_here
-LINKEDIN=https://www.linkedin.com/in/your-profile/
-GITHUB=https://github.com/your-username/
-DATABASE_URL=your_mongodb_connection_string
-```
-
-Replace the placeholders with actual values.
-
-## Database Configuration
-
-This project uses MongoDB via Prisma ORM. The database schema is defined in `prisma/schema.prisma`.
-
-Example schema:
-
-```prisma
-datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
-}
-
-model User {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
-  email    String  @unique
-  name     String?
-  password String?
+```json
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "phone": "9876543210",
+  "password": "strongpassword123"
 }
 ```
 
-## Running the Server
+**Success Response:**
 
-To start the server in development mode with hot-reloading:
-
-```bash
-npm run dev
+```json
+{
+  "message": "User registered successfully!"
+}
 ```
 
-## Contributing
+**Error Responses:**
 
-Contributions are welcome! Please feel free to submit a pull request or open an issue.
-
-## License
-
-This project is licensed under the ISC License. For more details, refer to the `LICENSE` file.
-
-## Dependencies
-
-Key dependencies used in this project:
-
-- `express`: Web application framework
-- `@prisma/client`: Prisma ORM client
-- `dotenv`: Environment variable management
-- `cors`: Cross-Origin Resource Sharing middleware
-- `helmet`: Security middleware
-- `body-parser`: Request body parsing middleware
-- `cookie-parser`: Cookie parsing middleware
-- `morgan`: HTTP request logger middleware
-
-For a complete list of dependencies, please refer to the `package.json` file.
+```json
+{
+  "message": "All fields are required."
+}
 ```
 
-This single file includes all the necessary information about the project, setup, and usage. It provides a clear, concise, and organized overview of your Express.js server application with Prisma and MongoDB. Let me know if you need further refinements!
+```json
+{
+  "message": "User with this email already exists."
+}
+```
+
+</details>
+
+---
+
+<details>
+<summary>2. Login User</summary>
+
+**Endpoint:** `POST /api/auth/login`
+
+**Description:** Authenticates a user by verifying email and password, then generates a JWT.
+
+**Request Body:**
+
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "strongpassword123"
+}
+```
+
+**Success Response:**
+
+```json
+{
+  "message": "Login successful!",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": "60a2b0c3f5d5b7a0e8f1c0d4",
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "role": "user"
+  }
+}
+```
+
+**Error Responses:**
+
+```json
+{
+  "message": "Email and password are required."
+}
+```
+
+```json
+{
+  "message": "Invalid credentials"
+}
+```
+
+</details>
+
+---
+
+<details>
+<summary>3. Send OTP</summary>
+
+**Endpoint:** `POST /api/auth/send-otp`
+
+**Description:** Generates a 4-digit OTP, saves it to the user's document with a 5-minute expiry, and emails it.
+
+**Request Body:**
+
+```json
+{
+  "email": "john.doe@example.com"
+}
+```
+
+**Success Response:**
+
+```json
+{
+  "message": "OTP sent successfully."
+}
+```
+
+**Error Responses:**
+
+```json
+{
+  "message": "Email is required."
+}
+```
+
+```json
+{
+  "message": "User not found."
+}
+```
+
+</details>
+
+---
+
+<details>
+<summary>4. Verify OTP</summary>
+
+**Endpoint:** `POST /api/auth/verify-otp`
+
+**Description:** Checks if the provided OTP matches the stored OTP and is within the expiry period.
+
+**Request Body:**
+
+```json
+{
+  "email": "john.doe@example.com",
+  "otp": "1234"
+}
+```
+
+**Success Response:**
+
+```json
+{
+  "message": "OTP verified successfully."
+}
+```
+
+**Error Responses:**
+
+```json
+{
+  "message": "Invalid or expired OTP."
+}
+```
+
+```json
+{
+  "message": "User not found."
+}
+```
+
+</details>
+
+---
+
+<details>
+<summary>5. Reset Password</summary>
+
+**Endpoint:** `POST /api/auth/reset-password`
+
+**Description:** Updates the user's password after OTP verification.
+
+**Request Body:**
+
+```json
+{
+  "email": "john.doe@example.com",
+  "newPassword": "new_strong_password123"
+}
+```
+
+**Success Response:**
+
+```json
+{
+  "message": "Password reset successfully."
+}
+```
+
+**Error Responses:**
+
+```json
+{
+  "message": "New password must be at least 8 characters long."
+}
+```
+
+```json
+{
+  "message": "User not found."
+}
+```
+
+</details>
+
+---
