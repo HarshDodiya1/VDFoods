@@ -1,3 +1,14 @@
+import ProtectedRoute from '@/components/ProtectedRoute';
+import AdminNavbar from '@/components/AdminNavbar';
+import AdminDashboard from '@/components/AdminDashboard';
+
 export default function Home() {
-  return <div>Hey there</div>;
+  return (
+    <ProtectedRoute>
+      <div className="min-h-screen bg-gray-50">
+        <AdminNavbar />
+        <AdminDashboard />
+      </div>
+    </ProtectedRoute>
+  );
 }
