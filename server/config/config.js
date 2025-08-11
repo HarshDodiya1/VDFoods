@@ -6,6 +6,6 @@ module.exports = {
   cors_origin2: process.env.CORS_ORIGIN2,
   dbURL: process.env.DATABASE_URL,
   jwtSecret: process.env.JWT_SECRET,
-  linkedIn: process.env.LINKEDIN,
-  github: process.env.GITHUB,
+  github1: process.env.GITHUB1,
+  github2: process.env.GITHUB2,
 };

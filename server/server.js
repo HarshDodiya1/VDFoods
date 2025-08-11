@@ -26,10 +26,10 @@ app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.status(200).json({
-    message: "Welcome to the Backend APIs",
-    creator: "Harsh Dodiya",
-    LinkedIn: config.linkedIn || "Harsh Dodiya",
-    GitHub: config.github || "Harsh Dodiya",
+    message: "Welcome to the Backend APIs of VDFoods",
+    creator: "Harsh Dodiya | Krish Prajapati",
+    Github: config.github1 || "Krish Prajapati",
+    GitHub: config.github2 || "Harsh Dodiya",
   });
 });
 
