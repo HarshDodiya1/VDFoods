@@ -20,6 +20,8 @@ app.use(express.urlencoded({ extended: true, limit: "20kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
+const connectDB = require("./db/db.js");
+connectDB();
 // Imported Routes
 
 // Routes
