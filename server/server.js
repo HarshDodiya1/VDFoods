@@ -22,9 +22,12 @@ app.use(cookieParser());
 
 const connectDB = require("./db/db.js");
 connectDB();
+
 // Imported Routes
+const authRoutes = require("./routes/authRoutes.js");
 
 // Routes
+app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({
