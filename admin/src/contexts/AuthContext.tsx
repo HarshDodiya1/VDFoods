@@ -1,13 +1,14 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, authAPI, tokenManager } from '@/lib/auth';
+import { User, authAPI, ChangePasswordData } from '@/lib/auth';
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; message?: string }>;
   logout: () => Promise<void>;
+  changePassword: (data: ChangePasswordData) => Promise<{ success: boolean; message: string }>;
   isAuthenticated: boolean;
 }
 
@@ -27,14 +28,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     const initializeAuth = async () => {
-      if (tokenManager.isAuthenticated()) {
-        try {
-          const currentUser = await authAPI.getCurrentUser();
+      try {
+        const currentUser = await authAPI.getCurrentUser();
+        if (currentUser) {
           setUser(currentUser);
-        } catch (error) {
-          console.error('Failed to get current user:', error);
-          tokenManager.removeToken();
         }
+      } catch (error) {
+        console.error('Failed to get current user:', error);
       }
       setLoading(false);
     };
@@ -46,8 +46,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(true);
     try {
       const response = await authAPI.login({ email, password });
-      if (response.success && response.user) {
-        setUser(response.user);
+      if (response.success && response.admin) {
+        setUser(response.admin);
         setLoading(false);
         return { success: true };
       } else {
@@ -71,11 +71,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(false);
   };
 
+  const changePassword = async (data: ChangePasswordData) => {
+    return await authAPI.changePassword(data);
+  };
+
   const value = {
     user,
     loading,
     login,
     logout,
+    changePassword,
     isAuthenticated: !!user,
   };
 

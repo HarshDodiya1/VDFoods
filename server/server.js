@@ -25,11 +25,15 @@ connectDB();
 
 // Imported Routes
 const authRoutes = require("./routes/authRoutes.js");
+const adminRoutes = require("./routes/adminRoutes.js")
+const productRoutes = require("./routes/productRoutes.js")
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/products", productRoutes);
 
-app.get("/", (req, res) => {
+app.get("/---", (req, res) => {
   res.status(200).json({
     message: "Welcome to the Backend APIs of VDFoods",
     creator: "Harsh Dodiya | Krish Prajapati",

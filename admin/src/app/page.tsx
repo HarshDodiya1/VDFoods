@@ -7,7 +7,9 @@ export default function Home() {
     <ProtectedRoute>
       <div className="min-h-screen bg-gray-50">
         <AdminNavbar />
-        <AdminDashboard />
+        <main className="max-w-7xl mx-auto">
+          <AdminDashboard />
+        </main>
       </div>
     </ProtectedRoute>
   );
