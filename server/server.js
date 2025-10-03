@@ -10,12 +10,10 @@ dotenv.config();
 app.use(
   cors({
     origin: [
-      "http://localhost:3001", // Next.js default dev port
-      "http://localhost:3002", // Alternative frontend port
+      "http://localhost:3000", // Frontend port
       "http://localhost:4000", // Admin frontend port
       config.cors_origin1, // Your existing config
       config.cors_origin2, // Your existing config
-      process.env.FRONTEND_URL, // Add this to your .env
     ].filter(Boolean), // Remove undefined values
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
