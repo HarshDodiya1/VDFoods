@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +11,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
@@ -18,35 +19,40 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  User, 
-  LogOut, 
-  Settings, 
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  User,
+  LogOut,
+  Settings,
   Shield,
   Eye,
   EyeOff,
-  Loader2
-} from 'lucide-react';
+  Loader2,
+  Package,
+  ShoppingCart,
+  LayoutDashboard,
+  FileText,
+} from "lucide-react";
 
 export default function AdminNavbar() {
   const { user, logout, changePassword } = useAuth();
+  const router = useRouter();
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [passwordData, setPasswordData] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
   });
   const [showPasswords, setShowPasswords] = useState({
     current: false,
     new: false,
-    confirm: false
+    confirm: false,
   });
-  const [passwordError, setPasswordError] = useState('');
-  const [passwordSuccess, setPasswordSuccess] = useState('');
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordSuccess, setPasswordSuccess] = useState("");
   const [isChangingPassword, setIsChangingPassword] = useState(false);
 
   const handleLogout = async () => {
@@ -55,38 +61,38 @@ export default function AdminNavbar() {
 
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
-    setPasswordError('');
-    setPasswordSuccess('');
+    setPasswordError("");
+    setPasswordSuccess("");
     setIsChangingPassword(true);
 
     try {
       const result = await changePassword(passwordData);
-      
+
       if (result.success) {
         setPasswordSuccess(result.message);
         setPasswordData({
-          currentPassword: '',
-          newPassword: '',
-          confirmPassword: ''
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
         });
         setTimeout(() => {
           setShowChangePassword(false);
-          setPasswordSuccess('');
+          setPasswordSuccess("");
         }, 2000);
       } else {
         setPasswordError(result.message);
       }
     } catch (error) {
-      setPasswordError('An unexpected error occurred');
+      setPasswordError("An unexpected error occurred");
     } finally {
       setIsChangingPassword(false);
     }
   };
 
-  const togglePasswordVisibility = (field: 'current' | 'new' | 'confirm') => {
-    setShowPasswords(prev => ({
+  const togglePasswordVisibility = (field: "current" | "new" | "confirm") => {
+    setShowPasswords((prev) => ({
       ...prev,
-      [field]: !prev[field]
+      [field]: !prev[field],
     }));
   };
 
@@ -98,6 +104,47 @@ export default function AdminNavbar() {
             <Shield className="h-8 w-8 text-blue-600" />
             <h1 className="text-xl font-bold text-gray-900">VD Foods Admin</h1>
           </div>
+
+          {/* Navigation Links */}
+          <nav className="hidden md:flex items-center gap-6 ml-8">
+            <Button
+              variant="ghost"
+              onClick={() => router.push("/")}
+              className="text-gray-600 hover:text-gray-900"
+            >
+              <LayoutDashboard className="h-4 w-4 mr-2" />
+              Dashboard
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => router.push("/products")}
+              className="text-gray-600 hover:text-gray-900"
+            >
+              <Package className="h-4 w-4 mr-2" />
+              Products
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => router.push("/orders")}
+              className="text-gray-600 hover:text-gray-900"
+            >
+              <ShoppingCart className="h-4 w-4 mr-2" />
+              Orders
+            </Button>
+            <a
+              href="https://invoice-generator-psi-eosin.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button
+                variant="ghost"
+                className="text-gray-600 hover:text-gray-900"
+              >
+                <FileText className="h-4 w-4 mr-2" />
+                Invoice
+              </Button>
+            </a>
+          </nav>
         </div>
 
         <div className="flex items-center space-x-4">
@@ -108,7 +155,11 @@ export default function AdminNavbar() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="flex items-center space-x-2"
+              >
                 <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                   <User className="h-4 w-4 text-blue-600" />
                 </div>
@@ -122,7 +173,10 @@ export default function AdminNavbar() {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <Dialog open={showChangePassword} onOpenChange={setShowChangePassword}>
+              <Dialog
+                open={showChangePassword}
+                onOpenChange={setShowChangePassword}
+              >
                 <DialogTrigger asChild>
                   <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                     <Settings className="mr-2 h-4 w-4" />
@@ -142,9 +196,14 @@ export default function AdminNavbar() {
                       <div className="relative">
                         <Input
                           id="currentPassword"
-                          type={showPasswords.current ? 'text' : 'password'}
+                          type={showPasswords.current ? "text" : "password"}
                           value={passwordData.currentPassword}
-                          onChange={(e) => setPasswordData(prev => ({ ...prev, currentPassword: e.target.value }))}
+                          onChange={(e) =>
+                            setPasswordData((prev) => ({
+                              ...prev,
+                              currentPassword: e.target.value,
+                            }))
+                          }
                           required
                           className="pr-10"
                           disabled={isChangingPassword}
@@ -154,7 +213,7 @@ export default function AdminNavbar() {
                           variant="ghost"
                           size="sm"
                           className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                          onClick={() => togglePasswordVisibility('current')}
+                          onClick={() => togglePasswordVisibility("current")}
                           disabled={isChangingPassword}
                         >
                           {showPasswords.current ? (
@@ -171,9 +230,14 @@ export default function AdminNavbar() {
                       <div className="relative">
                         <Input
                           id="newPassword"
-                          type={showPasswords.new ? 'text' : 'password'}
+                          type={showPasswords.new ? "text" : "password"}
                           value={passwordData.newPassword}
-                          onChange={(e) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
+                          onChange={(e) =>
+                            setPasswordData((prev) => ({
+                              ...prev,
+                              newPassword: e.target.value,
+                            }))
+                          }
                           required
                           className="pr-10"
                           disabled={isChangingPassword}
@@ -183,7 +247,7 @@ export default function AdminNavbar() {
                           variant="ghost"
                           size="sm"
                           className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                          onClick={() => togglePasswordVisibility('new')}
+                          onClick={() => togglePasswordVisibility("new")}
                           disabled={isChangingPassword}
                         >
                           {showPasswords.new ? (
@@ -196,13 +260,20 @@ export default function AdminNavbar() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                      <Label htmlFor="confirmPassword">
+                        Confirm New Password
+                      </Label>
                       <div className="relative">
                         <Input
                           id="confirmPassword"
-                          type={showPasswords.confirm ? 'text' : 'password'}
+                          type={showPasswords.confirm ? "text" : "password"}
                           value={passwordData.confirmPassword}
-                          onChange={(e) => setPasswordData(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                          onChange={(e) =>
+                            setPasswordData((prev) => ({
+                              ...prev,
+                              confirmPassword: e.target.value,
+                            }))
+                          }
                           required
                           className="pr-10"
                           disabled={isChangingPassword}
@@ -212,7 +283,7 @@ export default function AdminNavbar() {
                           variant="ghost"
                           size="sm"
                           className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                          onClick={() => togglePasswordVisibility('confirm')}
+                          onClick={() => togglePasswordVisibility("confirm")}
                           disabled={isChangingPassword}
                         >
                           {showPasswords.confirm ? (
@@ -245,17 +316,14 @@ export default function AdminNavbar() {
                       >
                         Cancel
                       </Button>
-                      <Button
-                        type="submit"
-                        disabled={isChangingPassword}
-                      >
+                      <Button type="submit" disabled={isChangingPassword}>
                         {isChangingPassword ? (
                           <>
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             Changing...
                           </>
                         ) : (
-                          'Change Password'
+                          "Change Password"
                         )}
                       </Button>
                     </div>

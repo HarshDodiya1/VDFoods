@@ -69,8 +69,8 @@ const login = async (req, res) => {
     res.cookie("adminToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // Use secure in production
-      sameSite: "strict",
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      sameSite: "none",
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     // 9. Send successful response

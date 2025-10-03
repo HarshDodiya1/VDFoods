@@ -1,4 +1,4 @@
-import { LOGIN_URL, ME, LOGOUT_URL, CHANGE_PASSWORD_URL } from './api';
+import { LOGIN_URL, ME, LOGOUT_URL, CHANGE_PASSWORD_URL, PRODUCTS_URL, PRODUCT_BY_ID_URL, PRODUCTS_BY_CATEGORY_URL, CREATE_PRODUCT_URL } from './api';
 
 export interface User {
   id: string;
@@ -15,6 +15,61 @@ export interface User {
   };
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface Product {
+  _id: string;
+  title: string;
+  slug: string;
+  description: string;
+  price: string; // Changed to string to support "₹299" format
+  oldPrice?: string; // Changed from originalPrice
+  image: string; // Main product image
+  images: string[]; // Additional images
+  category: string; // Changed to string enum instead of object
+  badge?: string;
+  rating: number;
+  reviews: number;
+  tags: string[];
+  weight?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateProductData {
+  title: string; // Changed from name
+  description: string;
+  price: string; // Changed to string
+  oldPrice?: string; // Changed from originalPrice
+  image: string; // Main product image
+  images?: string[]; // Additional images
+  category: string; // Changed to string enum
+  badge?: string;
+  rating?: number;
+  reviews?: number;
+  tags?: string[];
+  weight?: string;
+}
+
+export interface UpdateProductData extends Partial<CreateProductData> {}
+
+export interface ProductsResponse {
+  message: string;
+  data: {
+    products: Product[];
+    pagination: {
+      currentPage: number;
+      totalPages: number;
+      totalProducts: number;
+      hasNextPage: boolean;
+      hasPrevPage: boolean;
+    };
+  };
+}
+
+export interface ProductResponse {
+  message: string;
+  data: Product;
 }
 
 export interface LoginCredentials {
@@ -142,3 +197,150 @@ export const authAPI = {
     }
   },
 };
+
+// Product API functions
+export const productAPI = {
+  async getAllProducts(params?: {
+    page?: number;
+    limit?: number;
+    category?: string;
+    tags?: string[];
+    minPrice?: number;
+    maxPrice?: number;
+    search?: string;
+    sortBy?: string;
+    sortOrder?: 'asc' | 'desc';
+  }): Promise<ProductsResponse> {
+    try {
+      const searchParams = new URLSearchParams();
+      
+      if (params) {
+        Object.entries(params).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            if (Array.isArray(value)) {
+              searchParams.append(key, value.join(','));
+            } else {
+              searchParams.append(key, value.toString());
+            }
+          }
+        });
+      }
+
+      const url = `${PRODUCTS_URL}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
+      const response = await apiCall(url, {
+        method: 'GET',
+      });
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Get all products error:', error);
+      throw error;
+    }
+  },
+
+  async getProductById(id: string): Promise<ProductResponse> {
+    try {
+      const response = await apiCall(PRODUCT_BY_ID_URL(id), {
+        method: 'GET',
+      });
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Get product by ID error:', error);
+      throw error;
+    }
+  },
+
+  async createProduct(productData: CreateProductData): Promise<ProductResponse> {
+    try {
+      const response = await apiCall(CREATE_PRODUCT_URL, {
+        method: 'POST',
+        body: JSON.stringify(productData),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        return data;
+      } else {
+        throw new Error(data.message || 'Failed to create product');
+      }
+    } catch (error) {
+      console.error('Create product error:', error);
+      throw error;
+    }
+  },
+
+  async updateProduct(id: string, productData: UpdateProductData): Promise<ProductResponse> {
+    try {
+      const response = await apiCall(PRODUCT_BY_ID_URL(id), {
+        method: 'PUT',
+        body: JSON.stringify(productData),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        return data;
+      } else {
+        throw new Error(data.message || 'Failed to update product');
+      }
+    } catch (error) {
+      console.error('Update product error:', error);
+      throw error;
+    }
+  },
+
+  async deleteProduct(id: string): Promise<{ message: string; data: { id: string; name: string } }> {
+    try {
+      const response = await apiCall(PRODUCT_BY_ID_URL(id), {
+        method: 'DELETE',
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        return data;
+      } else {
+        throw new Error(data.message || 'Failed to delete product');
+      }
+    } catch (error) {
+      console.error('Delete product error:', error);
+      throw error;
+    }
+  },
+
+  async getProductsByCategory(categoryId: string, params?: {
+    page?: number;
+    limit?: number;
+    sortBy?: string;
+    sortOrder?: 'asc' | 'desc';
+  }): Promise<ProductsResponse> {
+    try {
+      const searchParams = new URLSearchParams();
+      
+      if (params) {
+        Object.entries(params).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            searchParams.append(key, value.toString());
+          }
+        });
+      }
+
+      const url = `${PRODUCTS_BY_CATEGORY_URL(categoryId)}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
+      const response = await apiCall(url, {
+        method: 'GET',
+      });
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Get products by category error:', error);
+      throw error;
+    }
+  },
+};
+
+

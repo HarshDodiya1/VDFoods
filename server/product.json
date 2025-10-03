@@ -1,0 +1,173 @@
+[
+  {
+    "title": "Premium Turmeric Powder",
+    "slug": "premium-turmeric-powder",
+    "description": "Freshly ground turmeric powder sourced directly from farms for authentic taste and maximum health benefits. Rich in curcumin, this premium quality turmeric is perfect for cooking and traditional remedies.",
+    "price": "₹299",
+    "oldPrice": "₹399",
+    "image": "https://random-image-pepebigotes.vercel.app/api/random-image",
+    "images": [
+      "https://random-image-pepebigotes.vercel.app/api/random-image",
+      "https://random-image-pepebigotes.vercel.app/api/random-image",
+      "https://random-image-pepebigotes.vercel.app/api/random-image"
+    ],
+    "category": "Grains",
+    "badge": "Best Seller",
+    "rating": 4.8,
+    "reviews": 124,
+    "tags": ["organic", "curcumin-rich", "farm-fresh"],
+    "weight": "250g"
+  },
+  {
+    "title": "Organic Garam Masala",
+    "slug": "organic-garam-masala",
+    "description": "Premium blend of aromatic spices to enhance flavor and aroma in your traditional dishes. Made from carefully selected whole spices, ground to perfection for maximum freshness.",
+    "price": "₹499",
+    "oldPrice": "₹599",
+    "image": "https://random-image-pepebigotes.vercel.app/api/random-image",
+    "images": [
+      "https://random-image-pepebigotes.vercel.app/api/random-image",
+      "https://random-image-pepebigotes.vercel.app/api/random-image",
+      "https://random-image-pepebigotes.vercel.app/api/random-image"
+    ],
+    "category": "Grains",
+    "badge": "Hot Deal",
+    "rating": 4.9,
+    "reviews": 89,
+    "tags": ["aromatic", "premium", "blended"],
+    "weight": "100g"
+  },
+  {
+    "title": "Cold-Pressed Mustard Oil",
+    "slug": "cold-pressed-mustard-oil",
+    "description": "Pure cold-pressed oil for healthy cooking and natural taste, rich in omega-3 fatty acids. Extracted using traditional methods to preserve nutrients and authentic flavor.",
+    "price": "₹399",
+    "oldPrice": "₹499",
+    "image": "https://random-image-pepebigotes.vercel.app/api/random-image",
+    "images": [
+      "https://random-image-pepebigotes.vercel.app/api/random-image",
+      "https://random-image-pepebigotes.vercel.app/api/random-image",
+      "https://random-image-pepebigotes.vercel.app/api/random-image"
+    ],
+    "category": "Grains",
+    "badge": "New",
+    "rating": 4.7,
+    "reviews": 67,
+    "tags": ["cold-pressed", "healthy", "traditional"],
+    "weight": "500ml"
+  },
+  {
+    "title": "Black Pepper Premium",
+    "slug": "black-pepper-premium",
+    "description": "High-quality whole black pepper from Kerala for rich and bold flavor in every dish. Hand-picked from the finest pepper vines for superior quality and taste.",
+    "price": "₹349",
+    "oldPrice": "₹449",
+    "image": "https://random-image-pepebigotes.vercel.app/api/random-image",
+    "images": [
+      "https://random-image-pepebigotes.vercel.app/api/random-image",
+      "https://random-image-pepebigotes.vercel.app/api/random-image",
+      "https://random-image-pepebigotes.vercel.app/api/random-image"
+    ],
+    "category": "Grains",
+    "badge": "Popular",
+    "rating": 4.6,
+    "reviews": 156,
+    "tags": ["bold-flavor", "hand-picked", "kerala"],
+    "weight": "200g"
+  },
+  {
+    "title": "Ceylon Cinnamon Sticks",
+    "slug": "ceylon-cinnamon-sticks",
+    "description": "Authentic Ceylon cinnamon sticks with sweet aromatic flavor to elevate your cooking. Known as 'true cinnamon', these sticks offer a delicate, sweet flavor profile.",
+    "price": "₹299",
+    "oldPrice": "₹399",
+    "image": "https://random-image-pepebigotes.vercel.app/api/random-image",
+    "images": [
+      "https://random-image-pepebigotes.vercel.app/api/random-image",
+      "https://random-image-pepebigotes.vercel.app/api/random-image",
+      "https://random-image-pepebigotes.vercel.app/api/random-image"
+    ],
+    "category": "Grains",
+    "badge": "Trending",
+    "rating": 4.8,
+    "reviews": 92,
+    "tags": ["true-cinnamon", "sweet-aromatic", "authentic"],
+    "weight": "150g"
+  },
+  {
+    "title": "Cardamom Pods Green",
+    "slug": "cardamom-pods-green",
+    "description": "Fresh green cardamom pods with intense flavor and aroma for desserts and beverages. Premium quality pods that retain their essential oils and natural fragrance.",
+    "price": "₹799",
+    "oldPrice": "₹899",
+    "image": "https://random-image-pepebigotes.vercel.app/api/random-image",
+    "images": [
+      "https://random-image-pepebigotes.vercel.app/api/random-image",
+      "https://random-image-pepebigotes.vercel.app/api/random-image",
+      "https://random-image-pepebigotes.vercel.app/api/random-image"
+    ],
+    "category": "Grains",
+    "badge": "Premium",
+    "rating": 4.9,
+    "reviews": 78,
+    "tags": ["fragrant", "desserts", "premium"],
+    "weight": "100g"
+  },
+  {
+    "title": "Red Chili Powder",
+    "slug": "red-chili-powder",
+    "description": "Authentic red chili powder with perfect heat and vibrant color for traditional recipes. Made from premium red chilies, carefully dried and ground for optimal flavor.",
+    "price": "₹249",
+    "oldPrice": "₹299",
+    "image": "https://random-image-pepebigotes.vercel.app/api/random-image",
+    "images": [
+      "https://random-image-pepebigotes.vercel.app/api/random-image",
+      "https://random-image-pepebigotes.vercel.app/api/random-image",
+      "https://random-image-pepebigotes.vercel.app/api/random-image"
+    ],
+    "category": "Grains",
+    "badge": "Best Seller",
+    "rating": 4.7,
+    "reviews": 203,
+    "tags": ["spicy", "vibrant-color", "authentic"],
+    "weight": "200g"
+  },
+  {
+    "title": "Cumin Seeds Whole",
+    "slug": "cumin-seeds-whole",
+    "description": "Premium quality cumin seeds with intense aroma and flavor for tempering and grinding. Sourced from the best farms for authentic taste and freshness.",
+    "price": "₹199",
+    "oldPrice": "₹249",
+    "image": "https://random-image-pepebigotes.vercel.app/api/random-image",
+    "images": [
+      "https://random-image-pepebigotes.vercel.app/api/random-image",
+      "https://random-image-pepebigotes.vercel.app/api/random-image",
+      "https://random-image-pepebigotes.vercel.app/api/random-image"
+    ],
+    "category": "Grains",
+    "badge": "Popular",
+    "rating": 4.6,
+    "reviews": 145,
+    "tags": ["authentic", "farm-fresh", "aromatic"],
+    "weight": "250g"
+  },
+  {
+    "title": "Coconut Oil Pure",
+    "slug": "coconut-oil-pure",
+    "description": "100% pure coconut oil extracted naturally for cooking and health benefits. Cold-pressed to retain all natural nutrients and the authentic coconut flavor.",
+    "price": "₹459",
+    "oldPrice": "₹549",
+    "image": "https://random-image-pepebigotes.vercel.app/api/random-image",
+    "images": [
+      "https://random-image-pepebigotes.vercel.app/api/random-image",
+      "https://random-image-pepebigotes.vercel.app/api/random-image",
+      "https://random-image-pepebigotes.vercel.app/api/random-image"
+    ],
+    "category": "Grains",
+    "badge": "New",
+    "rating": 4.8,
+    "reviews": 112,
+    "tags": ["pure", "nutrient-rich", "cold-pressed"],
+    "weight": "500ml"
+  }
+]

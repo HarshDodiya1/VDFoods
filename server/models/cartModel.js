@@ -14,7 +14,7 @@ const cartSchema = new mongoose.Schema(
           required: true,
         },
         quantity: { type: Number, default: 1, min: 1 },
-        priceAtTime: Number, // Store price when added to cart
+        priceAtTime: String, // Store price when added to cart
       },
     ],
     totalAmount: { type: Number, default: 0 },
