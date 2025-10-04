@@ -91,9 +91,17 @@ export interface AuthResponse {
 
 // API call helper with credentials for cookies
 export const apiCall = async (endpoint: string, options: RequestInit = {}) => {
-  const defaultHeaders = {
+  const defaultHeaders: any = {
     'Content-Type': 'application/json',
   };
+
+  // Add Authorization header if token exists in localStorage (fallback)
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('adminToken');
+    if (token) {
+      defaultHeaders.Authorization = `Bearer ${token}`;
+    }
+  }
 
   const config: RequestInit = {
     ...options,
@@ -120,6 +128,11 @@ export const authAPI = {
       const data = await response.json();
 
       if (response.ok) {
+        // Store token in localStorage as fallback
+        if (data.token && typeof window !== 'undefined') {
+          localStorage.setItem('adminToken', data.token);
+        }
+        
         return {
           success: true,
           admin: data.admin,
@@ -163,8 +176,17 @@ export const authAPI = {
       await apiCall(LOGOUT_URL, {
         method: 'POST',
       });
+      
+      // Clear token from localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('adminToken');
+      }
     } catch (error) {
       console.error('Logout error:', error);
+      // Still clear localStorage even if API call fails
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('adminToken');
+      }
     }
   },
 

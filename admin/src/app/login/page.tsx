@@ -66,8 +66,20 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 mb-4">
-            <ShieldCheck className="w-8 h-8 text-blue-600" />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 overflow-hidden">
+            <img 
+              src="/logo.png" 
+              alt="VD Foods Logo" 
+              className="w-20 h-20 object-contain"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+                const parent = target.parentElement;
+                if (parent) {
+                  parent.innerHTML = '<svg className="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 24 24"><path d="M9,12L11,14L15,10M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2Z" /></svg>';
+                }
+              }}
+            />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">VD Foods Admin</h1>
           <p className="text-gray-600">Sign in to your admin account</p>
@@ -147,12 +159,6 @@ export default function LoginPage() {
                 )}
               </Button>
             </form>
-
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-500">
-                Protected by enterprise-grade security
-              </p>
-            </div>
           </CardContent>
         </Card>
 

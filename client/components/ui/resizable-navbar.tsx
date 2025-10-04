@@ -284,17 +284,21 @@ export const NavbarLogo = () => {
       onClick={handleLogoClick}
       className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black cursor-pointer"
     >
-      <img
-        src="/logo.png"
-        alt="VD Foods Logo"
-        width={40}
-        height={40}
-        className="rounded"
-        onError={(e) => {
-          const target = e.target as HTMLImageElement;
-          target.style.display = "none";
-        }}
-      />
+      <div className="w-10 h-10 rounded-lg overflow-hidden flex items-center justify-center">
+        <img
+          src="/logo.png"
+          alt="VD Foods Logo"
+          className="w-10 h-10 object-contain"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.style.display = "none";
+            const parent = target.parentElement;
+            if (parent) {
+              parent.innerHTML = '<span className="text-white text-xs font-bold">VD</span>';
+            }
+          }}
+        />
+      </div>
       <span
         className="text-2xl font-bold text-neutral-700 dark:text-white"
         style={{ fontFamily: "'Playfair Display', serif" }}

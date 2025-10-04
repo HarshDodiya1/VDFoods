@@ -48,6 +48,25 @@ interface User {
   updatedAt?: string;
 }
 
+interface ContactFormData {
+  fullName: string;
+  email: string;
+  phoneNumber?: string;
+  inquiryType: string;
+  message: string;
+}
+
+interface ContactEntry {
+  _id: string;
+  fullName: string;
+  email: string;
+  phoneNumber?: string;
+  inquiryType: string;
+  message: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface Product {
   _id: string;
   title: string;
@@ -178,7 +197,6 @@ class ApiService {
   private baseURL: string;
 
   constructor() {
-    // ✅ FIXED: Changed to point to your backend on port 5000
     this.baseURL =
       process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000/api";
   }
@@ -444,6 +462,40 @@ class ApiService {
     });
   }
 
+  // Contact form submission
+  async submitContactForm(contactData: ContactFormData): Promise<{
+    success: boolean;
+    message: string;
+    data?: ContactEntry;
+  }> {
+    return this.apiCall<{
+      success: boolean;
+      message: string;
+      data?: ContactEntry;
+    }>("/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(contactData),
+    });
+  }
+
+  // Get all contact requests (Admin only)
+  async getAllContactRequests(): Promise<{
+    success: boolean;
+    count: number;
+    data: ContactEntry[];
+  }> {
+    return this.apiCall<{
+      success: boolean;
+      count: number;
+      data: ContactEntry[];
+    }>("/contact", {
+      method: "GET",
+    });
+  }
+
   // Helper method to get user from storage
   private getUserFromStorage(): User | null {
     if (typeof window !== "undefined") {
@@ -471,4 +523,6 @@ export type {
   RazorpayOrder,
   CreateOrderResponse,
   PaymentVerificationData,
+  ContactFormData,
+  ContactEntry,
 };

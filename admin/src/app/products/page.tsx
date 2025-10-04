@@ -73,7 +73,7 @@ import {
 import ProductFormNew from "@/components/ProductFormNew";
 import ProductDetailsDialogNew from "@/components/ProductDetailsDialogNew";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import AdminNavbar from "@/components/AdminNavbar";
+import AdminHeader from "@/components/AdminHeader";
 import { toast } from "sonner";
 import Image from "next/image";
 
@@ -549,7 +549,11 @@ export default function ProductsPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <AdminNavbar />
+        <AdminHeader 
+          title="VD Foods Admin" 
+          subtitle="Products" 
+          currentPage="products" 
+        />
         <LoadingSpinner />
       </div>
     );
@@ -594,7 +598,11 @@ export default function ProductsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <AdminNavbar />
+      <AdminHeader 
+        title="VD Foods Admin" 
+        subtitle="Products" 
+        currentPage="products" 
+      />
 
       <div className="p-6">
         {/* Header */}

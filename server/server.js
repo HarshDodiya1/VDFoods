@@ -18,6 +18,7 @@ app.use(
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+    exposedHeaders: ["Set-Cookie"],
     optionsSuccessStatus: 200, // Support legacy browsers
   }),
 );
@@ -40,6 +41,7 @@ const productRoutes = require("./routes/productRoutes.js");
 const adminRoutes = require("./routes/adminRoutes.js");
 const orderRoutes = require("./routes/orderRoutes.js");
 const orderAdminRoutes = require("./routes/orderAdminRoutes.js");
+const contactUsRoutes = require("./routes/contactUsRoute.js");
 
 // Routes
 app.use("/api/auth", authRoutes);
@@ -48,6 +50,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/admin/orders", orderAdminRoutes);
+app.use("/api/contact", contactUsRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({
@@ -55,7 +58,6 @@ app.get("/", (req, res) => {
     creator: "Harsh Dodiya | Krish Prajapati",
     Github: config.github1 || "Krish Prajapati",
     GitHub: config.github2 || "Harsh Dodiya",
-    frontend: process.env.FRONTEND_URL || "http://localhost:3001",
     apiDocs: "/api",
     status: "Running",
     timestamp: new Date().toISOString(),
@@ -69,6 +71,18 @@ app.get("/api/health", (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     environment: process.env.NODE_ENV || "development",
+  });
+});
+
+// Add a debug endpoint to check cookies and headers
+app.get("/api/debug/auth", (req, res) => {
+  res.status(200).json({
+    cookies: req.cookies,
+    headers: {
+      authorization: req.headers.authorization,
+      cookie: req.headers.cookie,
+    },
+    adminToken: req.cookies.adminToken ? "Present" : "Missing",
   });
 });
 

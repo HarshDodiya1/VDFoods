@@ -56,10 +56,12 @@ import {
   RefreshCw,
   Download,
   FileText,
+  Mail,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import AdminHeader from "@/components/AdminHeader";
 import { toast } from "sonner";
 import { dashboardAPI, type DashboardData } from "@/lib/api";
 
@@ -80,18 +82,6 @@ function Dashboard() {
   const [showAnalytics, setShowAnalytics] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
-  const [passwordForm, setPasswordForm] = useState({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  });
-  const [showPasswords, setShowPasswords] = useState({
-    current: false,
-    new: false,
-    confirm: false,
-  });
-  const [isChangingPassword, setIsChangingPassword] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
@@ -165,39 +155,6 @@ function Dashboard() {
     }
   };
 
-  const handleChangePassword = async () => {
-    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      toast.error("New passwords do not match");
-      return;
-    }
-
-    if (passwordForm.newPassword.length < 8) {
-      toast.error("Password must be at least 8 characters long");
-      return;
-    }
-
-    try {
-      setIsChangingPassword(true);
-      const result = await changePassword(passwordForm);
-
-      if (result.success) {
-        toast.success("Password changed successfully");
-        setIsChangePasswordOpen(false);
-        setPasswordForm({
-          currentPassword: "",
-          newPassword: "",
-          confirmPassword: "",
-        });
-      } else {
-        toast.error(result.message);
-      }
-    } catch (error) {
-      toast.error("Failed to change password");
-    } finally {
-      setIsChangingPassword(false);
-    }
-  };
-
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
@@ -251,243 +208,24 @@ function Dashboard() {
       color: "bg-purple-500",
       href: "/orders",
     },
+    {
+      title: "Contact Requests",
+      description: "View customer contact requests",
+      icon: Mail,
+      color: "bg-orange-500",
+      href: "/contact-requests",
+    },
   ];
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50"> 
         {/* Header */}
-        <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
-          <div className="container mx-auto px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center">
-                  <LayoutDashboard className="h-6 w-6 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-bold text-gray-900">
-                    VD Foods Admin
-                  </h1>
-                  <p className="text-sm text-gray-600">Dashboard</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <nav className="hidden md:flex items-center gap-6">
-                  <Button
-                    variant="ghost"
-                    onClick={() => router.push("/products")}
-                    className="text-gray-600 hover:text-gray-900"
-                  >
-                    <Package className="h-4 w-4 mr-2" />
-                    Products
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    onClick={() => router.push("/orders")}
-                    className="text-gray-600 hover:text-gray-900"
-                  >
-                    <ShoppingCart className="h-4 w-4 mr-2" />
-                    Orders
-                  </Button>
-                  <a
-                    href="https://invoice-generator-psi-eosin.vercel.app/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Button
-                      variant="ghost"
-                      className="text-gray-600 hover:text-gray-900"
-                    >
-                      <FileText className="h-4 w-4 mr-2" />
-                      Invoice
-                    </Button>
-                  </a>
-                </nav>
-
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-10 w-10">
-                    <AvatarFallback className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
-                      {user?.name?.charAt(0)?.toUpperCase() || "A"}
-                    </AvatarFallback>
-                  </Avatar>
-
-                  <div className="hidden md:block">
-                    <p className="text-sm font-medium text-gray-900">
-                      {user?.name}
-                    </p>
-                    <p className="text-xs text-gray-600">{user?.email}</p>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <Dialog
-                      open={isChangePasswordOpen}
-                      onOpenChange={setIsChangePasswordOpen}
-                    >
-                      <DialogTrigger asChild>
-                        <Button variant="outline" size="sm">
-                          <Settings className="h-4 w-4 mr-2" />
-                          Settings
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Change Password</DialogTitle>
-                        </DialogHeader>
-                        <div className="space-y-4">
-                          <div>
-                            <Label htmlFor="currentPassword" className="mb-2">
-                              Current Password
-                            </Label>
-                            <div className="relative">
-                              <Input
-                                id="currentPassword"
-                                type={
-                                  showPasswords.current ? "text" : "password"
-                                }
-                                value={passwordForm.currentPassword}
-                                onChange={(e) =>
-                                  setPasswordForm((prev) => ({
-                                    ...prev,
-                                    currentPassword: e.target.value,
-                                  }))
-                                }
-                                className="pr-10"
-                              />
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="absolute right-0 top-0 h-full px-3"
-                                onClick={() =>
-                                  setShowPasswords((prev) => ({
-                                    ...prev,
-                                    current: !prev.current,
-                                  }))
-                                }
-                              >
-                                {showPasswords.current ? (
-                                  <EyeOff className="h-4 w-4" />
-                                ) : (
-                                  <Eye className="h-4 w-4" />
-                                )}
-                              </Button>
-                            </div>
-                          </div>
-
-                          <div>
-                            <Label htmlFor="newPassword" className="mb-2">
-                              New Password
-                            </Label>
-                            <div className="relative">
-                              <Input
-                                id="newPassword"
-                                type={showPasswords.new ? "text" : "password"}
-                                value={passwordForm.newPassword}
-                                onChange={(e) =>
-                                  setPasswordForm((prev) => ({
-                                    ...prev,
-                                    newPassword: e.target.value,
-                                  }))
-                                }
-                                className="pr-10"
-                              />
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="absolute right-0 top-0 h-full px-3"
-                                onClick={() =>
-                                  setShowPasswords((prev) => ({
-                                    ...prev,
-                                    new: !prev.new,
-                                  }))
-                                }
-                              >
-                                {showPasswords.new ? (
-                                  <EyeOff className="h-4 w-4" />
-                                ) : (
-                                  <Eye className="h-4 w-4" />
-                                )}
-                              </Button>
-                            </div>
-                          </div>
-
-                          <div>
-                            <Label htmlFor="confirmPassword" className="mb-2">
-                              Confirm New Password
-                            </Label>
-                            <div className="relative">
-                              <Input
-                                id="confirmPassword"
-                                type={
-                                  showPasswords.confirm ? "text" : "password"
-                                }
-                                value={passwordForm.confirmPassword}
-                                onChange={(e) =>
-                                  setPasswordForm((prev) => ({
-                                    ...prev,
-                                    confirmPassword: e.target.value,
-                                  }))
-                                }
-                                className="pr-10"
-                              />
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="absolute right-0 top-0 h-full px-3"
-                                onClick={() =>
-                                  setShowPasswords((prev) => ({
-                                    ...prev,
-                                    confirm: !prev.confirm,
-                                  }))
-                                }
-                              >
-                                {showPasswords.confirm ? (
-                                  <EyeOff className="h-4 w-4" />
-                                ) : (
-                                  <Eye className="h-4 w-4" />
-                                )}
-                              </Button>
-                            </div>
-                          </div>
-
-                          <div className="flex justify-end gap-3">
-                            <Button
-                              variant="outline"
-                              onClick={() => setIsChangePasswordOpen(false)}
-                            >
-                              Cancel
-                            </Button>
-                            <Button
-                              onClick={handleChangePassword}
-                              disabled={isChangingPassword}
-                            >
-                              {isChangingPassword ? (
-                                <>
-                                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                  Changing...
-                                </>
-                              ) : (
-                                "Change Password"
-                              )}
-                            </Button>
-                          </div>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
-
-                    <Button variant="outline" size="sm" onClick={handleLogout}>
-                      <LogOut className="h-4 w-4 mr-2" />
-                      Logout
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </header>
+        <AdminHeader 
+          title="VD Foods Admin" 
+          subtitle="Dashboard" 
+          currentPage="dashboard" 
+        />
 
         {/* Main Content */}
         <main className="container mx-auto p-6 space-y-8">
@@ -661,7 +399,7 @@ function Dashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {quickActions.map((action, index) => (
                   <Card
                     key={index}

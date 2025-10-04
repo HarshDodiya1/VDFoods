@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-
 import { useState } from "react";
 import {
   Phone,
@@ -17,6 +16,7 @@ import {
   Award,
   CheckCircle2,
 } from "lucide-react";
+import apiService, { type ContactFormData } from "../../utils/api";
 
 export const dynamic = "force-dynamic";
 
@@ -28,19 +28,19 @@ interface ContactInfo {
 }
 
 interface FormData {
-  name: string;
+  fullName: string;
   email: string;
-  phone: string;
-  subject: string;
+  phoneNumber: string;
+  inquiryType: string;
   message: string;
 }
 
 export default function ContactPage(): React.ReactElement {
   const [formData, setFormData] = useState<FormData>({
-    name: "",
+    fullName: "",
     email: "",
-    phone: "",
-    subject: "",
+    phoneNumber: "",
+    inquiryType: "",
     message: "",
   });
 
@@ -93,18 +93,35 @@ export default function ContactPage(): React.ReactElement {
     e.preventDefault();
     setIsSubmitting(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      const contactData: ContactFormData = {
+        fullName: formData.fullName,
+        email: formData.email,
+        phoneNumber: formData.phoneNumber,
+        inquiryType: formData.inquiryType,
+        message: formData.message,
+      };
 
-    setIsSubmitting(false);
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      subject: "",
-      message: "",
-    });
-
-    alert("Thank you! Your message has been sent successfully.");
+      const response = await apiService.submitContactForm(contactData);
+      
+      if (response.success) {
+        alert(response.message || "Thank you! Your message has been sent successfully.");
+        setFormData({
+          fullName: "",
+          email: "",
+          phoneNumber: "",
+          inquiryType: "",
+          message: "",
+        });
+      } else {
+        alert("Failed to send message. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting contact form:", error);
+      alert("An error occurred. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -332,8 +349,8 @@ export default function ContactPage(): React.ReactElement {
                           <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-orange-500 transition-colors" />
                           <input
                             type="text"
-                            name="name"
-                            value={formData.name}
+                            name="fullName"
+                            value={formData.fullName}
                             onChange={handleInputChange}
                             placeholder="Enter your full name"
                             required
@@ -380,8 +397,8 @@ export default function ContactPage(): React.ReactElement {
                             <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-orange-500 transition-colors" />
                             <input
                               type="tel"
-                              name="phone"
-                              value={formData.phone}
+                              name="phoneNumber"
+                              value={formData.phoneNumber}
                               onChange={handleInputChange}
                               placeholder="+91 9104029941"
                               className="w-full pl-12 pr-4 py-4 bg-gray-50 border-0 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all duration-300 text-gray-700"
@@ -403,32 +420,32 @@ export default function ContactPage(): React.ReactElement {
                         <div className="relative">
                           <Building className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-orange-500 transition-colors" />
                           <select
-                            name="subject"
-                            value={formData.subject}
+                            name="inquiryType"
+                            value={formData.inquiryType}
                             onChange={handleInputChange}
                             required
                             className="w-full pl-12 pr-4 py-4 bg-gray-50 border-0 rounded-xl focus:bg-white focus:ring-2 focus:ring-orange-500 focus:outline-none transition-all duration-300 text-gray-700 appearance-none cursor-pointer"
                           >
                             <option value="">Choose your inquiry type</option>
-                            <option value="product-info">
+                            <option value="Product Information">
                               Product Information
                             </option>
-                            <option value="bulk-orders">
+                            <option value="Bulk & Wholesale Orders">
                               Bulk & Wholesale Orders
                             </option>
-                            <option value="custom-blends">
+                            <option value="Custom Spice Blends">
                               Custom Spice Blends
                             </option>
-                            <option value="restaurant-supply">
+                            <option value="Restaurant Supply">
                               Restaurant Supply
                             </option>
-                            <option value="quality-concern">
+                            <option value="Quality Concern">
                               Quality Concern
                             </option>
-                            <option value="partnership">
+                            <option value="Business Partnership">
                               Business Partnership
                             </option>
-                            <option value="general">General Question</option>
+                            <option value="General Questions">General Questions</option>
                           </select>
                         </div>
                       </motion.div>

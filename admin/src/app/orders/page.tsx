@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react"; // 👈 IMPORT Suspense
 export const dynamicParams = true;
 import { useRouter, useSearchParams } from "next/navigation";
-import AdminNavbar from "@/components/AdminNavbar";
+import AdminHeader from "@/components/AdminHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -672,7 +672,11 @@ function OrdersPageContent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      <AdminNavbar />
+      <AdminHeader 
+        title="VD Foods Admin" 
+        subtitle="Orders" 
+        currentPage="orders" 
+      />
       <div className="container mx-auto p-6 space-y-6">
         {/* Header */}
         <div className="flex flex-col space-y-4">

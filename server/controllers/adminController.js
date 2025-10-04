@@ -76,6 +76,7 @@ const login = async (req, res) => {
     // 9. Send successful response
     res.status(200).json({
       message: "Admin login successful!",
+      token: token, // Include token in response for localStorage fallback
       admin: {
         id: user._id,
         name: user.name,
@@ -164,7 +165,7 @@ const logout = async (req, res) => {
     res.clearCookie("adminToken", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "none",
     });
 
     // 3. Send successful response

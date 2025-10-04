@@ -16,8 +16,16 @@ const verifyToken = (token) => {
 // Middleware to authenticate admin using cookies
 const authenticateAdmin = async (req, res, next) => {
   try {
-    // 1. Read JWT from cookie
-    const token = req.cookies.adminToken;
+    // 1. Try to get JWT from cookie first, then from Authorization header
+    let token = req.cookies.adminToken;
+    
+    // If no token in cookie, check Authorization header
+    if (!token) {
+      const authHeader = req.headers.authorization;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.substring(7);
+      }
+    }
 
     if (!token) {
       return res.status(401).json({ message: 'No authentication token found.' });

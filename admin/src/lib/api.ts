@@ -32,6 +32,9 @@ export const ADMIN_ORDER_REFUND_URL = (orderId: string) =>
 export const ADMIN_ORDERS_BY_STATUS_URL = (status: string) =>
   `${API_URL}/admin/orders/orders/status/${status}`;
 
+// Contact requests APIs
+export const ADMIN_CONTACT_REQUESTS_URL = `${API_URL}/contact`;
+
 // Product APIs for Admin
 export const GET_PRODUCTS_URL = `${API_URL}/products`;
 export const GET_PRODUCT_URL = (id: string) => `${API_URL}/products/${id}`;
@@ -104,6 +107,17 @@ interface Order {
   cancelledAt?: string;
 }
 
+interface ContactEntry {
+  _id: string;
+  fullName: string;
+  email: string;
+  phoneNumber?: string;
+  inquiryType: string;
+  message: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface OrderFilters {
   page?: number;
   limit?: number;
@@ -121,6 +135,14 @@ const apiRequest = async <T = any>(
   const defaultHeaders: HeadersInit = {
     "Content-Type": "application/json",
   };
+
+  // Add Authorization header if token exists in localStorage (fallback)
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('adminToken');
+    if (token) {
+      defaultHeaders.Authorization = `Bearer ${token}`;
+    }
+  }
 
   try {
     const response = await fetch(url, {
@@ -158,6 +180,10 @@ export const dashboardAPI = {
     period: "week" | "month" | "year" = "month"
   ): Promise<ApiResponse> => {
     return apiRequest(`${ADMIN_ANALYTICS_URL}?period=${period}`);
+  },
+
+  getAllContactRequests: (): Promise<ApiResponse<ContactEntry[]>> => {
+    return apiRequest(ADMIN_CONTACT_REQUESTS_URL);
   },
 };
 
@@ -229,4 +255,4 @@ export const ordersAPI = {
   },
 };
 
-export type { ApiResponse, DashboardData, Order, OrderFilters };
+export type { ApiResponse, DashboardData, Order, OrderFilters, ContactEntry };
