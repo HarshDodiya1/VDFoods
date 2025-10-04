@@ -69,8 +69,9 @@ const login = async (req, res) => {
     res.cookie("adminToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // Use secure in production
-      sameSite: "none",
-      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Use lax for development
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      domain: process.env.NODE_ENV === "production" ? undefined : undefined, // No domain restriction in development
     });
 
     // 9. Send successful response
@@ -93,8 +94,16 @@ const login = async (req, res) => {
 // Controller to get current admin info
 const me = async (req, res) => {
   try {
-    // 1. Read JWT from cookie
-    const token = req.cookies.adminToken;
+    // 1. Try to get JWT from cookie first, then from Authorization header
+    let token = req.cookies.adminToken;
+    
+    // If no token in cookie, check Authorization header
+    if (!token) {
+      const authHeader = req.headers.authorization;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.substring(7);
+      }
+    }
 
     if (!token) {
       return res
@@ -165,7 +174,8 @@ const logout = async (req, res) => {
     res.clearCookie("adminToken", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      domain: process.env.NODE_ENV === "production" ? undefined : undefined,
     });
 
     // 3. Send successful response
@@ -179,8 +189,17 @@ const logout = async (req, res) => {
 // Controller for admin Password change.
 const changePassword = async (req, res) => {
   try {
-    // 1. Verify admin authentication
-    const token = req.cookies.adminToken;
+    // 1. Try to get JWT from cookie first, then from Authorization header
+    let token = req.cookies.adminToken;
+    
+    // If no token in cookie, check Authorization header
+    if (!token) {
+      const authHeader = req.headers.authorization;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.substring(7);
+      }
+    }
+
     if (!token) {
       return res.status(401).json({ message: "Authentication required." });
     }

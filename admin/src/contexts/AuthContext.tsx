@@ -29,13 +29,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const initializeAuth = async () => {
       try {
+        // First check if we have a token in localStorage as fallback
+        const token = localStorage.getItem('adminToken');
+        
         const currentUser = await authAPI.getCurrentUser();
         if (currentUser) {
           setUser(currentUser);
+        } else {
+          // If getCurrentUser fails but we have a token, it might be expired
+          // Clear it to avoid confusion
+          if (token) {
+            localStorage.removeItem('adminToken');
+          }
+          setUser(null);
         }
       } catch (error) {
         console.error('Failed to get current user:', error);
-        // Don't throw error, just continue with no user
+        // Clear potentially invalid token
+        localStorage.removeItem('adminToken');
         setUser(null);
       } finally {
         setLoading(false);

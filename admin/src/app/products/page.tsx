@@ -549,10 +549,10 @@ export default function ProductsPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <AdminHeader 
-          title="VD Foods Admin" 
-          subtitle="Products" 
-          currentPage="products" 
+        <AdminHeader
+          title="VD Foods Admin"
+          subtitle="Products"
+          currentPage="products"
         />
         <LoadingSpinner />
       </div>
@@ -598,10 +598,10 @@ export default function ProductsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <AdminHeader 
-        title="VD Foods Admin" 
-        subtitle="Products" 
-        currentPage="products" 
+      <AdminHeader
+        title="VD Foods Admin"
+        subtitle="Products"
+        currentPage="products"
       />
 
       <div className="p-6">
@@ -610,13 +610,9 @@ export default function ProductsPage() {
           <div className="flex justify-between items-start">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                Products Management
+                Showing {filteredAndSortedProducts.length}{" "}
+                of {allProducts.length} products
               </h1>
-              <p className="mt-2 text-gray-600">
-                Manage your product catalog, pricing, and inventory. Showing{" "}
-                {filteredAndSortedProducts.length} of {allProducts.length}{" "}
-                products.
-              </p>
             </div>
 
             <Dialog

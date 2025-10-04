@@ -275,13 +275,21 @@ function OrderDetailsDialog({
                   className="flex items-center justify-between p-3 border rounded-lg"
                 >
                   <div className="flex items-center gap-3">
-                    <img
-                      src={item.product.image}
-                      alt={item.product.title}
-                      className="w-12 h-12 object-cover rounded"
-                    />
+                    {item.product && item.product.image ? (
+                      <img
+                        src={item.product.image}
+                        alt={item.product.title || 'Product'}
+                        className="w-12 h-12 object-cover rounded"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center">
+                        <Package className="h-6 w-6 text-gray-400" />
+                      </div>
+                    )}
                     <div>
-                      <h4 className="font-medium">{item.product.title}</h4>
+                      <h4 className="font-medium">
+                        {item.product?.title || 'Product not found'}
+                      </h4>
                       <p className="text-sm text-gray-600">
                         Quantity: {item.quantity}
                       </p>
@@ -686,9 +694,7 @@ function OrdersPageContent() {
                 <ShoppingCart className="h-8 w-8 text-blue-600" />
                 Order Management
               </h1>
-              <p className="text-gray-600 mt-2">
-                Manage customer orders and track deliveries
-              </p>
+              
             </div>
             <Button onClick={fetchOrders} variant="outline">
               <RefreshCw className="h-4 w-4 mr-2" />

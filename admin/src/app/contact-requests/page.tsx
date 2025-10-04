@@ -123,7 +123,7 @@ function ContactRequestsPage() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold text-gray-900">Contact Requests</h2>
-              <p className="text-gray-600">Manage customer inquiries and contact requests</p>
+              
             </div>
             <Button
               variant="outline"
@@ -167,7 +167,7 @@ function ContactRequestsPage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <p className="text-sm text-gray-600">
-                  Showing {contacts.length} contact request{contacts.length !== 1 ? "s" : ""}
+                  {contacts.length} contact requests
                 </p>
               </div>
 
