@@ -40,6 +40,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   distDir: ".next",
+  output: 'standalone',
 };
 
 module.exports = nextConfig;
