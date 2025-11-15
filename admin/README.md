@@ -57,6 +57,12 @@ The admin panel expects the following API endpoints on your backend:
 - `GET /api/admin/dashboard/stats` - Get dashboard statistics
 - `GET /api/admin/orders/recent` - Get recent orders
 
+### Docker Command
+```bash
+docker build -t vd-admin:latest .
+docker run -d --name vd-admin -p 4000:4000 -e NEXT_PUBLIC_API_URL="http://localhost:5000" -e NODE_ENV=production vd-admin:latest
+```
+
 ### Expected API Response Format
 
 #### Login Response
